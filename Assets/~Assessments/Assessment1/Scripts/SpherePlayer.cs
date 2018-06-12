@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class SpherePlayer : MonoBehaviour
@@ -8,11 +9,17 @@ public class SpherePlayer : MonoBehaviour
 
     public float jumpHeight = 3f;
 
+    public Text countText;
+    public Text winText;
+
     private Rigidbody rigid;
+    private int count;
 
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
+        count = 0;
+        SetCountText ();
     }
 
     // Update is called once per frame
@@ -58,12 +65,23 @@ public class SpherePlayer : MonoBehaviour
         if (other.gameObject.CompareTag("Item"))
         {
             other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText ();
         }
         if (other.gameObject.CompareTag("Hazard"))
         {
             other.gameObject.SetActive(false);
             Vector3 jump = new Vector3(0.0f, 30, 0.0f);
             rigid.AddForce(jump * speed * Time.deltaTime);
+        }
+    }
+    // Text Script
+    void SetCountText ()
+    {
+        countText.text = "Count: " + count.ToString();
+        if (count >= 4)
+        {
+            winText.text = "You Win!";
         }
     }
 }
